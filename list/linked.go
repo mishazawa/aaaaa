@@ -2,38 +2,37 @@ package list
 
 type Node struct {
 	Value interface{}
-	Next *Node
-	Prev *Node
+	Next  *Node
+	Prev  *Node
 }
 
-func NewNode (val interface{}) *Node {
-	return &Node { Value: val, Next: nil, Prev: nil }
+func NewNode(val interface{}) *Node {
+	return &Node{Value: val, Next: nil, Prev: nil}
 }
 
 type LinkedList struct {
 	count uint
-	head *Node
-	tail *Node
+	head  *Node
+	tail  *Node
 }
 
-func NewLinkedList () *LinkedList {
-	return &LinkedList { 0, nil, nil }
+func NewLinkedList() *LinkedList {
+	return &LinkedList{0, nil, nil}
 }
 
-func (list *LinkedList) Len () uint {
+func (list *LinkedList) Len() uint {
 	return list.count
 }
 
-func (list *LinkedList) Head () *Node {
+func (list *LinkedList) Head() *Node {
 	return list.head
 }
 
-func (list *LinkedList) Tail () *Node {
+func (list *LinkedList) Tail() *Node {
 	return list.tail
 }
 
-
-func (list *LinkedList) Prepend (val interface {}) {
+func (list *LinkedList) Prepend(val interface{}) {
 	node := NewNode(val)
 	node.Next = list.head
 
@@ -50,7 +49,7 @@ func (list *LinkedList) Prepend (val interface {}) {
 	list.count += 1
 }
 
-func (list *LinkedList) Append (val interface {}) {
+func (list *LinkedList) Append(val interface{}) {
 	if list.tail == nil {
 		list.Prepend(val)
 	} else {
@@ -64,7 +63,7 @@ func (list *LinkedList) Append (val interface {}) {
 	}
 }
 
-func (list *LinkedList) Find (val interface {}) *Node {
+func (list *LinkedList) Find(val interface{}) *Node {
 	curr := list.head
 	for curr != nil {
 		if curr.Value == val {
@@ -75,6 +74,6 @@ func (list *LinkedList) Find (val interface {}) *Node {
 	return nil
 }
 
-func (list *LinkedList) Contains (val interface {}) bool {
+func (list *LinkedList) Contains(val interface{}) bool {
 	return list.Find(val) != nil
 }
