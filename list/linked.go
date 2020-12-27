@@ -13,7 +13,7 @@ func NewNode(val interface{}) *Node {
 }
 
 type LinkedList struct {
-	count uint
+	count int
 	head  *Node
 	tail  *Node
 }
@@ -22,7 +22,7 @@ func NewLinkedList() *LinkedList {
 	return &LinkedList{0, nil, nil}
 }
 
-func (list *LinkedList) Len() uint {
+func (list *LinkedList) Len() int {
 	return list.count
 }
 
@@ -84,6 +84,18 @@ func (list *LinkedList) Remove(val interface{}) {
 	node := list.Find(val)
 	if node != nil {
 		list.removeItem(node)
+	}
+}
+
+func (list *LinkedList) RemoveHead() {
+	if list.head != nil {
+		list.removeItem(list.head)
+	}
+}
+
+func (list *LinkedList) RemoveTail() {
+	if list.tail != nil {
+		list.removeItem(list.tail)
 	}
 }
 

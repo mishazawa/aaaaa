@@ -274,3 +274,34 @@ func TestLinkedListRangeBackward(t *testing.T) {
 		t.Errorf("buffer[] = %v; want %v", buffer, []int{testval3, testval2, testval1})
 	}
 }
+
+func TestLinkedListRemoveHead(t *testing.T) {
+	list := NewLinkedList()
+
+	testval1 := 1
+	testval2 := 2
+
+	list.Append(testval1)
+	list.Append(testval2)
+	list.RemoveHead()
+
+	if list.Head() != list.Tail() {
+		t.Errorf("LinkedList.Head = %v; want %v", list.Head(), testval2)
+	}
+}
+
+func TestLinkedListRemoveTail(t *testing.T) {
+	list := NewLinkedList()
+
+	testval1 := 1
+	testval2 := 2
+
+	list.Append(testval1)
+	list.Append(testval2)
+
+	list.RemoveTail()
+
+	if list.Head() != list.Tail() {
+		t.Errorf("LinkedList.Tail = %v; want %v", list.Tail(), testval1)
+	}
+}
