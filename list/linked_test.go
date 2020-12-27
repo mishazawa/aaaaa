@@ -164,3 +164,113 @@ func TestLinkedListContains(t *testing.T) {
 		t.Errorf("LinkedList.Find 666 should not be found")
 	}
 }
+
+func TestLinkedListRemove(t *testing.T) {
+	list := NewLinkedList()
+
+	testval1 := 1
+	testval2 := 2
+	testval3 := 3
+
+	list.Append(testval1)
+	list.Append(testval2)
+	list.Append(testval2)
+	list.Append(testval3)
+
+	initLen := list.Len()
+
+	list.Remove(testval2)
+
+	if list.Len() != initLen-1 {
+		t.Errorf("LinkedList.Len = %v; want %v", list.Len(), initLen-1)
+	}
+
+	initLen = list.Len()
+
+	testnode2 := list.Find(testval2)
+
+	if testnode2.Next.Value != testval3 {
+		t.Errorf("node2.Next = %v; want %v", testnode2.Next.Value, testval3)
+	}
+
+	list.Remove(testval2)
+	initLen = list.Len()
+
+	testnode1 := list.Find(testval1)
+	testnode3 := list.Find(testval3)
+
+	if testnode1.Next != testnode3 {
+		t.Errorf("node1.Next = %v; want %v", testnode1.Next, testnode3)
+	}
+
+	if testnode3.Prev != testnode1 {
+		t.Errorf("node3.Prev = %v; want %v", testnode3.Prev, testnode1)
+	}
+
+	list.Remove(testval1)
+	testnode3 = list.Find(testval3)
+
+	if testnode3.Prev != nil {
+		t.Errorf("node3.Prev = %v; want nil", testnode3.Prev)
+	}
+
+	initLen = list.Len()
+
+	list.Remove(testval1)
+
+	if list.Len() != initLen {
+		t.Errorf("LinkedList.Len = %v; want %v", list.Len(), initLen)
+	}
+
+	if list.Head() != testnode3 {
+		t.Errorf("LinkedList.Head = %v; want %v", list.Head(), testnode3)
+	}
+
+	if list.Tail() != testnode3 {
+		t.Errorf("LinkedList.Tail = %v; want %v", list.Tail(), testnode3)
+	}
+}
+
+func TestLinkedListRange(t *testing.T) {
+	list := NewLinkedList()
+
+	testval1 := 1
+	testval2 := 2
+	testval3 := 3
+
+	list.Append(testval1)
+	list.Append(testval2)
+	list.Append(testval3)
+
+	buffer := make([]int, 0)
+	list.Range(func(val interface{}) {
+		i := val.(int)
+		buffer = append(buffer, i)
+	})
+
+	if buffer[0] != testval1 || buffer[1] != testval2 || buffer[2] != testval3 {
+		t.Errorf("buffer[] = %v; want %v", buffer, []int{testval1, testval2, testval3})
+	}
+}
+
+func TestLinkedListRangeBackward(t *testing.T) {
+	list := NewLinkedList()
+
+	testval1 := 1
+	testval2 := 2
+	testval3 := 3
+
+	list.Append(testval1)
+	list.Append(testval2)
+	list.Append(testval3)
+
+	buffer := make([]int, 0)
+	list.RangeBackward(func(val interface{}) {
+		i := val.(int)
+		buffer = append(buffer, i)
+	})
+
+	if buffer[0] != testval3 || buffer[1] != testval2 || buffer[2] != testval1 {
+		t.Errorf("buffer[] = %v; want %v", buffer, []int{testval3, testval2, testval1})
+	}
+}

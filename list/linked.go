@@ -6,6 +6,8 @@ type Node struct {
 	Prev  *Node
 }
 
+type rangeCallback = func(interface{})
+
 func NewNode(val interface{}) *Node {
 	return &Node{Value: val, Next: nil, Prev: nil}
 }
@@ -76,4 +78,43 @@ func (list *LinkedList) Find(val interface{}) *Node {
 
 func (list *LinkedList) Contains(val interface{}) bool {
 	return list.Find(val) != nil
+}
+
+func (list *LinkedList) Remove(val interface{}) {
+	node := list.Find(val)
+	if node != nil {
+		list.removeItem(node)
+	}
+}
+
+func (list *LinkedList) removeItem(node *Node) {
+	if node.Prev != nil {
+		node.Prev.Next = node.Next
+	} else {
+		list.head = node.Next
+	}
+
+	if node.Next != nil {
+		node.Next.Prev = node.Prev
+	} else {
+		list.tail = node.Prev
+	}
+
+	list.count -= 1
+}
+
+func (list *LinkedList) Range(callback rangeCallback) {
+	curr := list.head
+	for curr != nil {
+		callback(curr.Value)
+		curr = curr.Next
+	}
+}
+
+func (list *LinkedList) RangeBackward(callback rangeCallback) {
+	curr := list.tail
+	for curr != nil {
+		callback(curr.Value)
+		curr = curr.Prev
+	}
 }
