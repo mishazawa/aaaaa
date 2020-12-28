@@ -1,6 +1,10 @@
 package bst
 
-import "testing"
+import (
+	"strconv"
+	"strings"
+	"testing"
+)
 
 type TestWrapInt int
 
@@ -11,7 +15,7 @@ func NewTestWrapInt(v int) TestWrapInt {
 func (a TestWrapInt) Gte(b interface{}) bool {
 	aint := int(a)
 	bint := toInt(b)
-	return aint >= bint
+	return aint > bint
 }
 
 func toInt(v interface{}) int {
@@ -119,4 +123,85 @@ func TestBstAdd(t *testing.T) {
 		t.Errorf("leaf root.Left.Left = %v; want = %v", root.Left.Left.Value, 0)
 	}
 
+}
+
+func TestBstPreOrderTraverse(t *testing.T) {
+	insert := "12,14,18,7,7,3"
+	need := "127371418"
+
+	var root *Node
+
+	for _, s := range strings.Split(insert, ",") {
+		i, _ := strconv.Atoi(s)
+		if root == nil {
+			root = NewRoot(NewTestWrapInt(i))
+		} else {
+			root.Add(NewTestWrapInt(i))
+		}
+	}
+
+	acc := ""
+	root.PreOrderTraverse(func(v interface{}) {
+		s := strconv.Itoa(toInt(v))
+		acc += s
+	})
+
+	if acc != need {
+		t.Errorf("PreOrderTraverse acc = %v; want = %v", acc, need)
+
+	}
+}
+
+func TestBstInOrderTraverse(t *testing.T) {
+	insert := "12,14,18,7,7,3"
+	need := "377121418"
+
+	var root *Node
+
+	for _, s := range strings.Split(insert, ",") {
+		i, _ := strconv.Atoi(s)
+		if root == nil {
+			root = NewRoot(NewTestWrapInt(i))
+		} else {
+			root.Add(NewTestWrapInt(i))
+		}
+	}
+
+	acc := ""
+	root.InOrderTraverse(func(v interface{}) {
+		s := strconv.Itoa(toInt(v))
+		acc += s
+	})
+
+	if acc != need {
+		t.Errorf("InOrderTraverse acc = %v; want = %v", acc, need)
+
+	}
+}
+
+func TestBstPostOrderTraverse(t *testing.T) {
+	insert := "12,14,18,7,7,3"
+	need := "377181412"
+
+	var root *Node
+
+	for _, s := range strings.Split(insert, ",") {
+		i, _ := strconv.Atoi(s)
+		if root == nil {
+			root = NewRoot(NewTestWrapInt(i))
+		} else {
+			root.Add(NewTestWrapInt(i))
+		}
+	}
+
+	acc := ""
+	root.PostOrderTraverse(func(v interface{}) {
+		s := strconv.Itoa(toInt(v))
+		acc += s
+	})
+
+	if acc != need {
+		t.Errorf("InOrderTraverse acc = %v; want = %v", acc, need)
+
+	}
 }

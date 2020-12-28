@@ -10,6 +10,8 @@ type Node struct {
 	Right *Node
 }
 
+type actionFn func(interface{})
+
 func NewRoot(val ComparableValue) *Node {
 	return &Node{val, nil, nil}
 }
@@ -20,6 +22,42 @@ func (n *Node) Add(val ComparableValue) {
 	} else {
 		n.addRight(val)
 	}
+}
+
+func (n *Node) PreOrderTraverse(action actionFn) {
+	action(n.Value)
+
+	if n.Left != nil {
+		n.Left.PreOrderTraverse(action)
+	}
+
+	if n.Right != nil {
+		n.Right.PreOrderTraverse(action)
+	}
+}
+
+func (n *Node) InOrderTraverse(action actionFn) {
+	if n.Left != nil {
+		n.Left.InOrderTraverse(action)
+	}
+
+	action(n.Value)
+
+	if n.Right != nil {
+		n.Right.InOrderTraverse(action)
+	}
+}
+
+func (n *Node) PostOrderTraverse(action actionFn) {
+	if n.Left != nil {
+		n.Left.PostOrderTraverse(action)
+	}
+
+	if n.Right != nil {
+		n.Right.PostOrderTraverse(action)
+	}
+
+	action(n.Value)
 }
 
 func (n *Node) addRight(val ComparableValue) {
