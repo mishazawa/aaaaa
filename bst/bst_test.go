@@ -18,6 +18,12 @@ func (a TestWrapInt) GT(b interface{}) bool {
 	return aint > bint
 }
 
+func (a TestWrapInt) EQ(b interface{}) bool {
+	aint := int(a)
+	bint := toInt(b)
+	return aint == bint
+}
+
 func toInt(v interface{}) int {
 	return int(v.(TestWrapInt))
 }
@@ -203,5 +209,36 @@ func TestBstPostOrderTraverse(t *testing.T) {
 	if acc != need {
 		t.Errorf("InOrderTraverse acc = %v; want = %v", acc, need)
 
+	}
+}
+
+func TestBstSearch(t *testing.T) {
+	insert := "12,14,18,7,9,3"
+
+	var root *Node
+
+	for _, s := range strings.Split(insert, ",") {
+		i, _ := strconv.Atoi(s)
+		if root == nil {
+			root = NewRoot(NewTestWrapInt(i))
+		} else {
+			root.Add(NewTestWrapInt(i))
+		}
+	}
+
+	node := root.Search(NewTestWrapInt(9))
+
+	if node == nil {
+		t.Errorf("Search node = %v; want = %v", node, 9)
+	}
+
+	if toInt(node.Value) != 9 {
+		t.Errorf("Search val = %v; want = %v", node.Value, 9)
+	}
+
+	node = root.Search(NewTestWrapInt(666))
+
+	if node != nil {
+		t.Errorf("Search node = %v; want = %v", node, nil)
 	}
 }

@@ -2,18 +2,24 @@ package bst
 
 type ComparableValue interface {
 	GT(interface{}) bool
+	EQ(interface{}) bool
 }
 
 type Node struct {
-	Value ComparableValue
-	Left  *Node
-	Right *Node
+	Value  ComparableValue
+	Left   *Node
+	Right  *Node
+	parent *Node
 }
 
 type actionFn func(interface{})
 
 func NewRoot(val ComparableValue) *Node {
-	return &Node{val, nil, nil}
+	return &Node{val, nil, nil, nil}
+}
+
+func newChild(val ComparableValue, parent *Node) *Node {
+	return &Node{val, nil, nil, parent}
 }
 
 func (n *Node) Add(val ComparableValue) {
@@ -60,6 +66,22 @@ func (n *Node) PostOrderTraverse(action actionFn) {
 	action(n.Value)
 }
 
+func (n *Node) Search(val ComparableValue) *Node {
+	if n.Value.GT(val) {
+		if n.Left != nil {
+			return n.Left.Search(val)
+		}
+	} else {
+		if n.Value.EQ(val) {
+			return n
+		}
+		if n.Right != nil {
+			return n.Right.Search(val)
+		}
+	}
+	return nil
+}
+
 func (n *Node) addRight(val ComparableValue) {
 	if n.Value == nil {
 		n.Value = val
@@ -67,7 +89,7 @@ func (n *Node) addRight(val ComparableValue) {
 	}
 
 	if n.Right == nil {
-		n.Right = NewRoot(val)
+		n.Right = newChild(val, n)
 		return
 	}
 
@@ -76,7 +98,7 @@ func (n *Node) addRight(val ComparableValue) {
 
 func (n *Node) addLeft(val ComparableValue) {
 	if n.Left == nil {
-		n.Left = NewRoot(val)
+		n.Left = newChild(val, n)
 		return
 	}
 
