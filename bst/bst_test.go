@@ -12,7 +12,7 @@ func NewTestWrapInt(v int) TestWrapInt {
 	return TestWrapInt(v)
 }
 
-func (a TestWrapInt) Gte(b interface{}) bool {
+func (a TestWrapInt) GT(b interface{}) bool {
 	aint := int(a)
 	bint := toInt(b)
 	return aint > bint

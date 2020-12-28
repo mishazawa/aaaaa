@@ -1,7 +1,7 @@
 package bst
 
 type ComparableValue interface {
-	Gte(interface{}) bool
+	GT(interface{}) bool
 }
 
 type Node struct {
@@ -17,7 +17,7 @@ func NewRoot(val ComparableValue) *Node {
 }
 
 func (n *Node) Add(val ComparableValue) {
-	if n.Value == nil || n.Value.Gte(val) {
+	if n.Value == nil || n.Value.GT(val) {
 		n.addLeft(val)
 	} else {
 		n.addRight(val)
